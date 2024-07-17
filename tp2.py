@@ -1,7 +1,7 @@
-from sqlalchemy import MetaData, create_engine, Table, Column, Integer, String;
+from sqlalchemy import MetaData, Table, Column, Integer, String, ForeignKey,create_engine;
 
 
-#engine=create_engine('sqlite+pysqlite:///:memory:',echo=True)
+engine=create_engine('sqlite+pysqlite:///:memory:',echo=True)
 metadata_obj=MetaData()
 user_table=Table(
     "user_account",
@@ -11,5 +11,14 @@ user_table=Table(
     Column("fullname",String),
 )
 
+adress_table=Table(
+    "adress",
+    metadata_obj,
+    Column("id",Integer, primary_key=True),
+    Column("user_id",ForeignKey("user_account.id"),nullable=False),
+    Column("email_adress",String,nullable=False),
+)
+
 
 print(user_table.c.keys())
+metadata_obj.create_all(engine)
