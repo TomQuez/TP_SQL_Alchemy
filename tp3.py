@@ -59,3 +59,21 @@ with engine.connect() as conn:
     result=conn.execute(stmt)
     conn.execute(stmt)
     conn.commit()
+    
+print(result.inserted_primary_key)
+print(insert(user_table))
+
+with engine.connect() as conn:
+    result=conn.execute(
+        insert(user_table),
+        [
+            {"name":"Sandy","fullname":"Sandy Cheeks"},
+            {"name":"Patrick","fullname":"Patrick Star"}
+        ]
+    )
+    
+select_stmt=select(user_table.c.id, user_table.c.name +"@aol.com")
+insert_stmt=insert(adress_table).from_select(
+    ["user_id","email_adress"], select_stmt
+)
+print(insert_stmt.returning(adress_table.c.id,adress_table.c.email_adress))
